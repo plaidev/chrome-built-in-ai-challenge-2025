@@ -76,6 +76,7 @@ async function initializeApp() {
   initializeTextInput();
   initializeEditableSummaries();
   initializeStaffMemo();
+  initializeTranscriptContainer();
 
   // Setup event listeners
   setupEventListeners();
@@ -90,7 +91,7 @@ function initializePlaceholders() {
   const style = document.createElement('style');
   style.id = 'language-styles';
   style.textContent = `
-    #final_span:empty::before {
+    #transcript_container.show-placeholder::before {
       content: 'You can paste or type conversation here...';
     }
     .summary-box:empty::before {
@@ -436,6 +437,56 @@ function initializeStaffMemo() {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text');
     document.execCommand('insertText', false, text);
+  });
+}
+
+/**
+ * Initialize transcript container click handling
+ */
+function initializeTranscriptContainer() {
+  const transcriptContainer = document.getElementById('transcript_container');
+  const finalSpan = document.getElementById('final_span');
+  const interimSpan = document.getElementById('interim_span');
+
+  if (!transcriptContainer || !finalSpan || !interimSpan) return;
+
+  // Function to update placeholder visibility
+  function updatePlaceholder() {
+    const hasFinalText = finalSpan.textContent.trim().length > 0;
+    const hasInterimText = interimSpan.textContent.trim().length > 0;
+
+    if (hasFinalText || hasInterimText) {
+      transcriptContainer.classList.remove('show-placeholder');
+    } else {
+      transcriptContainer.classList.add('show-placeholder');
+    }
+  }
+
+  // Initial placeholder state
+  updatePlaceholder();
+
+  // Watch for changes in final_span
+  const finalObserver = new MutationObserver(updatePlaceholder);
+  finalObserver.observe(finalSpan, {
+    childList: true,
+    characterData: true,
+    subtree: true
+  });
+
+  // Watch for changes in interim_span
+  const interimObserver = new MutationObserver(updatePlaceholder);
+  interimObserver.observe(interimSpan, {
+    childList: true,
+    characterData: true,
+    subtree: true
+  });
+
+  // When clicking on the container, focus the final_span
+  transcriptContainer.addEventListener('click', function(e) {
+    // Only focus if the click target is the container itself, not the spans
+    if (e.target === transcriptContainer) {
+      finalSpan.focus();
+    }
   });
 }
 

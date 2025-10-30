@@ -249,44 +249,55 @@ body {
   font-style: normal;
 }
 
-#final_span {
+#transcript_container {
   display: block;
-  height: 200px;  /* max-heightからheightに変更で常に最大化 */
+  height: 200px;
   overflow-y: auto;
   padding-right: 0.5rem;
   outline: none;
   cursor: text;
-  min-height: 200px;  /* 最小高さも200pxに設定 */
+  min-height: 200px;
+}
+
+#transcript_container:focus {
+  /* フォーカス時の背景色変更を無効化 */
+}
+
+
+/* Scrollbar styling for transcript_container */
+#transcript_container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#transcript_container::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+#transcript_container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  transition: background var(--duration) var(--easing);
+}
+
+#transcript_container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#final_span {
+  outline: none;
 }
 
 #final_span:focus {
   /* フォーカス時の背景色変更を無効化 */
 }
 
-#final_span:empty::before {
-  content: 'ここに会話をペーストまたは入力できます...';
+#transcript_container.show-placeholder::before {
+  content: 'You can paste or type conversation here...';
   color: var(--text-secondary);
   font-style: italic;
-}
-
-/* Scrollbar styling for final_span */
-#final_span::-webkit-scrollbar {
-  width: 6px;
-}
-
-#final_span::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 3px;
-}
-
-#final_span::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  transition: background var(--duration) var(--easing);
-}
-
-#final_span::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  pointer-events: none;
 }
 
 .final {
