@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="no-js consumer" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+    <title>Activity Search Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body class="" id="grid">
+    <div class="browser-landing" id="main">
+      <div class="compact marquee-stacked" id="marquee">
+        <div class="marquee-copy">
+          <h1>
+            Activity Search Assistant
+          </h1>
+        </div>
+      </div>
+      <div class="compact marquee">
+        <div id="info">
+          <p id="info_start">
+            Click the microphone icon to start voice input.
+          </p>
+          <p id="info_speak_now" style="display:none">
+            Please speak now.
+          </p>
+          <p id="info_no_speech" style="display:none">
+            No speech was detected. Please check your <a href=
+            "//support.google.com/chrome/bin/answer.py?answer=1407892">microphone settings</a>.
+          </p>
+          <p id="info_no_microphone" style="display:none">
+            No microphone was found. Ensure that a microphone is installed and that your
+            <a href="//support.google.com/chrome/bin/answer.py?answer=1407892">
+            microphone settings</a> are configured correctly.
+          </p>
+          <p id="info_allow" style="display:none">
+            Click the "Allow" button above to enable your microphone.
+          </p>
+          <p id="info_denied" style="display:none">
+            Permission to use microphone was denied.
+          </p>
+          <p id="info_blocked" style="display:none">
+            Permission to use microphone is blocked. To change, visit
+            chrome://settings/contentExceptions#media-stream
+          </p>
+          <p id="info_upgrade" style="display:none">
+            Web Speech API is not supported by this browser. Upgrade to <a href=
+            "//www.google.com/chrome">Chrome</a> version 25 or later.
+          </p>
+        </div>
+        <div id="results">
+          <span class="final" id="final_span" contenteditable="true" tabindex="0"></span> <span class="interim" id=
+          "interim_span"></span>
+          <div class="button-group">
+            <button id="reset_button" onclick="resetButton()" title="Reset">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M3 21v-5h5"/>
+              </svg>
+            </button>
+            <button id="start_button" onclick="startButton(event)">
+              <svg id="start_img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="8" y1="22" x2="16" y2="22"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="summary-section">
+        <div class="summary-header">
+          <h2 class="section-title">
+            AI Summary
+            <span class="section-subtitle">For activity search</span>
+          </h2>
+        </div>
+        <div class="summary-box-wrapper">
+          <div class="summary-box" id="summary" contenteditable="true" tabindex="0"></div>
+        </div>
+        <div class="ai-status" id="aiStatus" style="display: none;">
+        </div>
+      </div>
+      <!-- Travel Assistant Section - Simplified -->
+      <div class="assistant-section compact" id="assistantSection" style="display: block;">
+        <div class="assistant-compact-box">
+          <div class="ai-assistant-container" id="suggestionBox">
+            <div class="ai-avatar">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="AI Assistant" />
+            </div>
+            <div class="ai-bubble">
+              <div class="ai-bubble-content">
+                <span class="suggestion-text" id="suggestionText">Let's gather information about the following:<br>
+1. Destination<br>
+2. Travel Dates / Duration<br>
+3. Number of Travelers<br>
+4. Traveler Profile (age, special needs)<br>
+5. Activity Type / Interests<br>
+6. Budget per Person<br>
+7. Time Preference<br>
+8. Physical Activity Level<br>
+9. Group Type (optional)<br>
+10. Language Preference (optional)<br>
+11. Transportation (optional)<br>
+12. Special Requirements (optional)</span>
+              </div>
+              <div class="ai-bubble-arrow"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Staff Notes Section -->
+      <div class="staff-memo-section">
+        <h2 class="section-title">
+          Staff Notes
+          <span class="section-subtitle">For activity search</span>
+        </h2>
+        <div class="memo-box" id="staffMemo" contenteditable="true" tabindex="0"></div>
+      </div>
+      <!-- Tour Search Button - Centered -->
+      <div class="search-button-section">
+        <button id="searchToursButton" class="search-tours-button">
+          Search Activities
+        </button>
+      </div>
+      <div class="tour-section" id="tourRecommendations" style="display: none;">
+        <h2 class="section-title">
+          Recommended Activities
+        </h2>
+        <!-- Search Progress -->
+        <div class="search-progress" id="searchProgress" style="display: none;">
+          <div class="progress-message" id="progressMessage"></div>
+        </div>
+        <div class="tour-grid-container">
+          <button class="tour-scroll-button tour-scroll-button-left" id="tourScrollLeft" aria-label="Previous">‹</button>
+          <div class="tour-grid">
+          </div>
+          <button class="tour-scroll-button tour-scroll-button-right" id="tourScrollRight" aria-label="Next">›</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- AI Setup Modal -->
+    <div id="aiSetupModal" class="modal">
+      <div class="modal-content">
+        <h2>AI Feature Setup</h2>
+        <p>Using Gemini Nano (Chrome built-in AI) to summarize conversation content.</p>
+        <div id="modalStatus" class="modal-status">
+          <span class="loading-spinner"></span>
+          Preparing...
+        </div>
+        <button id="modalDownloadButton" class="modal-button">
+          Download AI Model
+        </button>
+      </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
