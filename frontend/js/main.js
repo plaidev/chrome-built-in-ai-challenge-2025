@@ -31,6 +31,9 @@ async function initializeApp() {
   // Set placeholders for English
   initializePlaceholders();
 
+  // Check AI models availability and show download modal if needed
+  await checkAIModelsAvailability();
+
   // Initialize Summarizer API
   await initializeSummarizer();
 
@@ -82,6 +85,161 @@ async function initializeApp() {
   setupEventListeners();
 
   console.log('✅ Application initialized successfully');
+}
+
+/**
+ * Check AI models availability and show download modal if needed
+ */
+async function checkAIModelsAvailability() {
+  const modal = document.getElementById('aiSetupModal');
+  const statusDiv = document.getElementById('modalStatus');
+  const downloadButton = document.getElementById('modalDownloadButton');
+
+  if (!modal || !statusDiv || !downloadButton) return;
+
+  let summarizerAvailability = 'unavailable';
+  let languageModelAvailability = 'unavailable';
+
+  // Check Summarizer availability
+  try {
+    if (window.Summarizer) {
+      summarizerAvailability = await Summarizer.availability();
+      console.log('Summarizer availability:', summarizerAvailability);
+    }
+  } catch (error) {
+    console.error('Failed to check Summarizer availability:', error);
+  }
+
+  // Check LanguageModel (Prompt API) availability
+  try {
+    if (window.LanguageModel) {
+      languageModelAvailability = await LanguageModel.availability();
+      console.log('LanguageModel availability:', languageModelAvailability);
+    }
+  } catch (error) {
+    console.error('Failed to check LanguageModel availability:', error);
+  }
+
+  // Determine if we need to show the download modal
+  const needsDownload = summarizerAvailability === 'downloadable' || languageModelAvailability === 'downloadable';
+  const isDownloading = summarizerAvailability === 'downloading' || languageModelAvailability === 'downloading';
+
+  if (needsDownload || isDownloading) {
+    // Show modal
+    modal.style.display = 'flex';
+
+    if (isDownloading) {
+      statusDiv.innerHTML = '<span class="loading-spinner"></span> Downloading AI models...';
+      downloadButton.style.display = 'none';
+    } else if (needsDownload) {
+      statusDiv.innerHTML = '⚠️ AI models need to be downloaded for full functionality';
+      downloadButton.style.display = 'block';
+
+      // Add download button click handler
+      downloadButton.onclick = async () => {
+        // Disable button and change text with spinner
+        downloadButton.disabled = true;
+        downloadButton.innerHTML = '<span class="loading-spinner"></span> Downloading AI models...';
+
+        try {
+          let summarizerProgress = 0;
+          let languageModelProgress = 0;
+
+          const updateProgress = () => {
+            // Use Summarizer progress as the main indicator
+            const displayProgress = summarizerProgress;
+
+            statusDiv.innerHTML = `
+              <div style="margin-bottom: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.875rem; color: var(--text-primary);">Downloading AI models...</span>
+                  <span style="font-size: 0.875rem; font-weight: 600; color: #4a90e2;">${displayProgress.toFixed(0)}%</span>
+                </div>
+                <div class="download-progress">
+                  <div class="download-progress-bar" style="width: ${displayProgress}%"></div>
+                </div>
+              </div>
+            `;
+          };
+
+          // Initial progress update
+          updateProgress();
+
+          // Download models sequentially (parallel may fail due to user gesture requirement)
+
+          // Try to create Summarizer (triggers download)
+          if (summarizerAvailability === 'downloadable' && window.Summarizer) {
+            console.log('🔴 [main.js] Starting Summarizer.create() for download...');
+            await window.Summarizer.create({
+              sharedContext: 'Travel agency consultation conversation',
+              type: 'tldr',
+              format: 'plain-text',
+              length: 'long',
+              monitor(m) {
+                m.addEventListener('downloadprogress', (e) => {
+                  summarizerProgress = e.loaded * 100;
+                  console.log(`🔴 [main.js] Summarizer downloaded: ${summarizerProgress.toFixed(0)}%`);
+                  updateProgress();
+                });
+              }
+            });
+            console.log('🔴 [main.js] Summarizer.create() completed - download finished');
+            summarizerProgress = 100;
+            updateProgress();
+          }
+
+          // Try to create LanguageModel session (triggers download)
+          if (languageModelAvailability === 'downloadable' && window.LanguageModel) {
+            console.log('🔵 [main.js] Starting LanguageModel.create() for download...');
+            await window.LanguageModel.create({
+              monitor(m) {
+                m.addEventListener('downloadprogress', (e) => {
+                  languageModelProgress = e.loaded * 100;
+                  console.log(`🔵 [main.js] LanguageModel downloaded: ${languageModelProgress.toFixed(0)}%`);
+                  updateProgress();
+                });
+              }
+            });
+            console.log('🔵 [main.js] LanguageModel.create() completed - download finished');
+            languageModelProgress = 100;
+            updateProgress();
+          }
+
+          // Poll for completion
+          const checkInterval = setInterval(async () => {
+            let summarizerStatus = 'unavailable';
+            let languageModelStatus = 'unavailable';
+
+            if (window.Summarizer) {
+              summarizerStatus = await window.Summarizer.availability();
+            }
+            if (window.LanguageModel) {
+              languageModelStatus = await window.LanguageModel.availability();
+            }
+
+            const summarizerReady = summarizerAvailability === 'downloadable' ? summarizerStatus === 'available' : true;
+            const languageModelReady = languageModelAvailability === 'downloadable' ? languageModelStatus === 'available' : true;
+
+            if (summarizerReady && languageModelReady) {
+              clearInterval(checkInterval);
+              statusDiv.innerHTML = '✅ AI models downloaded successfully!';
+              downloadButton.textContent = 'Download Complete';
+              setTimeout(() => {
+                modal.style.display = 'none';
+                location.reload(); // Reload to reinitialize with new models
+              }, 2000);
+            }
+          }, 2000);
+
+        } catch (error) {
+          console.error('Download failed:', error);
+          statusDiv.innerHTML = '❌ Download failed. Please try again.';
+          downloadButton.disabled = false;
+          downloadButton.textContent = 'Download AI Model';
+        }
+      };
+    }
+  }
 }
 
 /**

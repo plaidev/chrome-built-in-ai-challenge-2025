@@ -23,6 +23,7 @@ export class AIAssistant {
 
       switch (availability) {
         case 'available':
+          console.log('🟢 [ai-assistant.js - initialize] Starting LanguageModel.create() for Travel Assistant session...');
           this.session = await LanguageModel.create({
             initialPrompts: [
               {
@@ -31,7 +32,7 @@ export class AIAssistant {
               }
             ]
           });
-          console.log('Travel Assistant initialized - model available');
+          console.log('🟢 [ai-assistant.js - initialize] LanguageModel.create() completed - Travel Assistant initialized');
           if (suggestionText) {
             suggestionText.innerHTML = 'Let\'s gather information about the following:<br>1. Destination<br>2. Travel Dates / Duration<br>3. Number of Travelers<br>4. Traveler Profile (age, special needs)<br>5. Activity Type / Interests<br>6. Budget per Person<br>7. Time Preference<br>8. Physical Activity Level<br>9. Group Type (optional)<br>10. Language Preference (optional)<br>11. Transportation (optional)<br>12. Special Requirements (optional)';
           }
@@ -78,6 +79,7 @@ export class AIAssistant {
         if (availability === 'available') {
           clearInterval(checkInterval);
 
+          console.log('🟡 [ai-assistant.js - checkDownloadStatus] Starting LanguageModel.create() after download...');
           this.session = await LanguageModel.create({
             initialPrompts: [
               {
@@ -87,7 +89,7 @@ export class AIAssistant {
             ]
           });
 
-          console.log('Travel Assistant ready after download');
+          console.log('🟡 [ai-assistant.js - checkDownloadStatus] LanguageModel.create() completed - Travel Assistant ready after download');
 
           const suggestionText = document.getElementById('suggestionText');
           if (suggestionText) {
@@ -292,6 +294,7 @@ Let's ask about language preference
         suggestionText.innerHTML = '⏳ Downloading the AI model... 0%';
       }
 
+      console.log('🟠 [ai-assistant.js - downloadAndCreate] Starting LanguageModel.create() with download...');
       this.session = await LanguageModel.create({
         initialPrompts: [
           {
@@ -302,7 +305,7 @@ Let's ask about language preference
         monitor(m) {
           m.addEventListener('downloadprogress', (e) => {
             const percent = Math.round(e.loaded * 100);
-            console.log(`Travel Assistant model downloading: ${percent}%`);
+            console.log(`🟠 [ai-assistant.js - downloadAndCreate] Travel Assistant model downloading: ${percent}%`);
             if (suggestionText) {
               suggestionText.innerHTML = `⏳ Downloading the AI model... ${percent}%`;
             }
@@ -310,7 +313,7 @@ Let's ask about language preference
         }
       });
 
-      console.log('Travel Assistant session created with download');
+      console.log('🟠 [ai-assistant.js - downloadAndCreate] LanguageModel.create() completed - Travel Assistant session created with download');
 
       if (suggestionText) {
         suggestionText.innerHTML = 'Let\'s gather information about the following:<br>1. Destination (Where to go)<br>2. Duration (Number of days/nights)<br>3. Travel dates (Specific departure and return dates)<br>4. Departure point (Airport)<br>5. Budget (Per person)<br>6. Number of travelers<br>7. Travel season (Month, season, holidays, etc.)<br>8. Interests (Activities, places to visit)<br>9. Other requirements (Hotel grade, etc.)';
