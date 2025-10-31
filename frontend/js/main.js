@@ -1,6 +1,6 @@
 /**
  * Main Application Entry Point
- * Activity Search Assistant - Chrome Built-in AI Challenge
+ * AI Travel Activity Planning Assistant - Chrome Built-in AI Challenge
  */
 
 import { API_BASE_URL, MIN_TEXT_LENGTH } from './config.js';
