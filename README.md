@@ -1,4 +1,4 @@
-# AI-Powered Travel Activity Assistant
+# AI Travel Activity Planning Assistant
 
 > **Google Chrome Built-in AI Challenge 2025 Submission**
 
@@ -10,42 +10,29 @@ An intelligent travel activity search assistant that leverages Chrome's Built-in
 
 ## 🎥 Demo Video
 
-**[Watch Demo Video (3 minutes)](https://www.youtube.com/watch?v=vm_aq-CtGXs)**
+**[Watch Demo Video](https://www.youtube.com/watch?v=vm_aq-CtGXs)**
 
 ## 🌟 Project Overview
 
-This application revolutionizes the travel consultation process by using Chrome's Built-in AI to:
-- **Transcribe and summarize** customer conversations in real-time
-- **Extract key travel requirements** automatically (destination, dates, budget, preferences)
-- **Provide intelligent suggestions** for missing information
-- **Search and recommend activities** from multiple platforms (Klook, Trip.com, Expedia)
+**AI Travel Activity Planning Assistant** empowers travel agents with on-device AI intelligence, enabling privacy-first customer consultations through Chrome's Built-in AI.
 
-### Problem Statement
+### What it does
 
-Travel agents face multiple challenges during customer consultations:
+✅ **Privacy-First Conversation Processing**: All AI analysis runs entirely on-device using Gemini Nano (Prompt API / Summarizer API). Conversation data never leaves the device, ensuring full GDPR compliance.
 
-1. **Manual Note-Taking Overhead**: Agents spend significant time writing notes instead of engaging with customers, often missing important details or forgetting to ask key questions.
+✅ **Real-Time Staff Guidance**: The Prompt API instantly analyzes ongoing dialogues, extracting key travel requirements and suggesting the next best question (e.g., "Ask about activity level" or "Confirm dietary restrictions").
 
-2. **Privacy & Compliance Concerns**: Traditional cloud-based transcription services require sending sensitive customer conversations (including personal information, travel plans, and payment details) to external servers, raising GDPR and data protection concerns.
+✅ **Intelligent Mentoring**: The AI functions as a digital mentor, helping even junior agents deliver expert-level consultations from day one — eliminating missed questions and overlooked details.
 
-3. **Inefficient Information Extraction**: Converting free-form conversations into structured travel requirements is time-consuming and error-prone.
+✅ **Human-AI Collaboration**: The system balances human strengths — empathy and relationship building — with AI capabilities in data processing and coverage. Staff stay focused on meaningful conversations while the AI handles the rest.
 
-4. **Training and Quality Assurance**: Less experienced staff often struggle to remember all necessary questions during consultations, leading to incomplete information gathering and reduced service quality. Traditional training takes months and requires constant supervision.
+✅ **Smart Activity Search**: The Summarizer API converts natural dialogue into structured data for our backend API. Gemini 2.5 Flash, enhanced with Google Search Grounding, finds personalized travel activities complete with images and references from platforms like Klook, Trip.com, and Expedia.
 
-**Our Solution**: This application leverages Chrome's Built-in AI to process conversations entirely on-device, ensuring zero data transmission to external servers while automating the consultation workflow. The AI assistant guides staff through comprehensive information gathering with real-time suggestions, enabling even junior agents to deliver expert-level consultations. Agents can focus on building customer relationships while maintaining complete privacy compliance.
+### Inspiration
 
-## 🤖 Chrome Built-in AI APIs Used
+The inspiration came from a long-standing challenge in retail and customer service — balancing AI innovation with privacy protection. Many companies wanted to leverage customer interactions for insight, yet real-world conversations often contain personal information that cannot safely be sent to the cloud.
 
-### 1. **Prompt API** (Primary)
-- Real-time analysis of conversation transcripts
-- Intelligent extraction of travel requirements (12-item structured format)
-- Context-aware suggestions for missing information
-- Natural language understanding for customer intent
-
-### 2. **Summarizer API**
-- Automatic summarization of customer conversations
-- Structured output generation for activity search
-- Key information extraction from unstructured dialogue
+When **Chrome Built-in AI** was announced, we saw a turning point. For the first time, we could process conversations *on-device*, keeping sensitive data secure while enabling real-time understanding. That sparked our idea: to build a solution that empowers front-line sales reps through human-AI collaboration — using Chrome's built-in intelligence to make every customer interaction smarter, faster, and more personal.
 
 ## 🏗️ Architecture
 
@@ -123,272 +110,167 @@ Travel agents face multiple challenges during customer consultations:
 - Skeleton loading states
 - Responsive design
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-**For Frontend (Chrome Built-in AI):**
-- Google Chrome Canary/Dev (version 127+)
-- Enable Chrome AI features:
-  1. Navigate to `chrome://flags`
-  2. Enable the following flags:
-     - `#optimization-guide-on-device-model` → **Enabled BypassPerfRequirement**
-     - `#prompt-api-for-gemini-nano` → **Enabled**
-     - `#summarization-api-for-gemini-nano` → **Enabled**
-  3. Restart Chrome
-  4. Verify Gemini Nano is available:
-     - Open DevTools Console
-     - Run: `await ai.languageModel.capabilities()`
-     - Should return: `{available: "readily"}`
-
-**For Backend:**
-- Node.js 18+
-- Google Cloud Platform account (optional - can run in Mock Mode)
-- Vertex AI API enabled (required only for production mode)
-
-### Installation
-
-#### 1. Clone the Repository
-
-```bash
-git clone https://github.com/plaidev/chrome-built-in-ai-challenge-2025.git
-cd chrome-built-in-ai-challenge-2025
-```
-
-#### 2. Backend Setup
-
-**Option A: Mock Mode (Demo - No GCP Required)**
-
-Perfect for testing and demonstrations without GCP credentials.
-
-```bash
-cd backend
-
-# Install dependencies
-npm install
-
-# Create .env file
-cp .env.example .env
-
-# The default .env has MOCK_MODE=true, so you can start immediately
-npm start
-```
-
-The server will start in **Mock Mode** and return sample activity data.
-
-**Option B: Production Mode (Real GCP APIs)**
-
-For production use with real Gemini API calls.
-
-```bash
-cd backend
-
-# Install dependencies
-npm install
-
-# Create .env file
-cp .env.example .env
-
-# Edit .env file:
-# MOCK_MODE=false
-# GCP_PROJECT=your-gcp-project-id
-# GCP_LOCATION=us-central1
-# PORT=8080
-
-# Start the server
-npm start
-```
-
-The backend server will start on `http://localhost:8080`
-
-**Mock Mode vs Production Mode:**
-- `MOCK_MODE=true` - Returns sample Paris activity data instantly (no GCP required)
-- `MOCK_MODE=false` - Uses real Gemini 2.5 Flash API with Google Search Grounding
-
-#### 3. Frontend Setup
-
-```bash
-cd ../frontend
-
-# Option 1: Using Python's HTTP server
-python3 -m http.server 8000
-
-# Option 2: Using Node.js http-server
-npx http-server -p 8000
-
-# Option 3: Using VS Code Live Server extension
-# Just right-click index.html and select "Open with Live Server"
-```
-
-Access the application at `http://localhost:8000`
-
 ## 🧪 Testing Instructions
 
-### Test Scenario 1: Paris Family Trip (Full Demo)
+We provide two testing patterns depending on your use case:
 
-1. **Start the Application**
-   - Open Chrome Canary with AI flags enabled
-   - Navigate to `http://localhost:8000`
-   - Ensure backend is running (check for mock mode warning if needed)
+---
 
-2. **Input Conversation**
-   - Copy the following sample conversation into the text input area:
+### Pattern 1: Quick Demo (Using Live Demo Site)
 
-   ```
-   Speaker 1: Hi Mr. Johnson, thank you for coming in today. I'm Emily White, and I'll be assisting you.
+**Prerequisites:**
+* Update Chrome to latest version (see "Chrome Setup" section below)
 
-   Speaker 1: I understand you and your family—three of you—will be in Paris from November 10th to 17th, and you're looking for local activities. I heard your son is in 4th grade and this will be his first trip to Europe.
+**Testing Steps:**
 
-   Speaker 2: That's right. We want him to have a memorable experience.
+1. **Download AI Models (First-Time Only)**
+   * Open https://chrome-built-in-ai-challenge-2025.vercel.app/
+   * If a modal appears, click "Download AI Model" and wait for models to download (this may take some time)
+   * Modal closes automatically when ready
 
-   Speaker 1: Of course. I'd recommend a mix of sightseeing and fun local experiences—like visiting the Eiffel Tower, taking a Seine River cruise, and joining a French pastry-making class together. Disneyland Paris is also a great option for families.
+2. **Start Voice Recognition**
+   * Click the microphone button (turns red when active)
 
-   Speaker 2: That sounds great. He'd love Disneyland, and the pastry class sounds fun for all of us.
+3. **Play Demo Audio**
+   * Download `demo-dialog.wav` from the repository
+   * Play the audio file near your microphone
+   * **Expected Result**: Transcript appears in real-time as the audio plays
 
-   Speaker 1: If you'd like to explore beyond the city, a day trip to Mont Saint-Michel is another great choice. The island's medieval abbey makes it enjoyable for both kids and adults. All of these activities are generally around $200 per person.
+4. **Verify Summarizer API**
+   * After the audio finishes, check the "AI Summary" section
+   * **Expected Result**: A structured summary with extracted travel requirements appears
 
-   Speaker 2: That's perfect. So Paris sightseeing, Disneyland, the pastry class, and maybe Mont Saint-Michel.
+5. **Verify Prompt API (AI Assistant)**
+   * Check the AI Assistant (with avatar) section during/after playback
+   * **Expected Result**: AI suggestions appear based on the conversation content
 
-   Speaker 1: Exactly. I'll prepare a few personalized activity plans for your week in Paris with the budget in mind.
+6. **Add Staff Notes (Optional)**
+   * Manually input any missing information in the "Staff Notes" field
+   * Example: "Customer prefers morning activities"
 
-   Speaker 2: That would be great—thank you so much!
-   ```
+7. **Search Activities**
+   * Click the "Search Activities" button
+   * **Expected Result**: Relevant activity recommendations appear with images and references
 
-3. **Observe AI Analysis**
-   - Wait 2-3 seconds for automatic processing
-   - **AI Summary** section should populate with structured information:
-     - Destination: Paris, France
-     - Travel Dates: November 10th-17th (7 days)
-     - Number of Travelers: 3
-     - Traveler Profile: 4th grade child, first trip to Europe
-     - Activity Interests: Eiffel Tower, Seine cruise, pastry class, Disneyland, Mont Saint-Michel
-     - Budget: ~$200 per person
-   - **AI Assistant** section should show:
-     - ✓ Collected information (green checkmarks)
-     - Missing items (if any) with suggestions
+---
 
-4. **Search Activities**
-   - Click the **"Search Activities"** button
-   - Page should auto-scroll to results section
-   - Skeleton cards appear during loading
-   - After 3-5 seconds, activity recommendations appear from 3 platforms:
-     - **Klook**: Eiffel Tower, Louvre Museum
-     - **Trip.com**: Disneyland Paris, Versailles Palace
-     - **Expedia**: French Pastry Class, Mont Saint-Michel Day Trip
+### Pattern 2: Local Development with Mock Data
 
-5. **Verify Results**
-   - Each activity card should display:
-     - Title and description
-     - Highlights (bullet points)
-     - Budget information
-     - Platform name (Klook/Trip.com/Expedia)
-     - References with clickable links
-   - If in **Mock Mode**, a warning banner appears: "⚠️ MOCK DATA - This is sample data for demonstration purposes"
+**Prerequisites:**
+* Update Chrome to latest version (see "Chrome Setup" section below)
+* Node.js 18+
+* Docker (optional, for containerized backend)
 
-### Test Scenario 2: Voice Input (Chrome Canary only)
+**Backend Setup (Docker):**
 
-1. **Enable Microphone**
-   - Click the microphone button in the "Customer Conversation" section
-   - Allow microphone permissions when prompted
+1. `git clone https://github.com/plaidev/chrome-built-in-ai-challenge-2025.git`
+2. `cd chrome-built-in-ai-challenge-2025/backend`
+3. `docker-compose up`
+4. Server starts on `http://localhost:8080`
 
-2. **Speak Naturally**
-   - Read the sample conversation aloud (or improvise a travel consultation)
-   - Watch the real-time transcription appear in the text area
+**Backend Setup (Without Docker):**
 
-3. **Verify AI Processing**
-   - After speaking, click "Stop Recording"
-   - AI should analyze the transcription automatically
-   - Summary and suggestions should populate
+1. `git clone https://github.com/plaidev/chrome-built-in-ai-challenge-2025.git`
+2. `cd chrome-built-in-ai-challenge-2025/backend`
+3. `npm install`
+4. `MOCK_MODE=true npm run start`
+5. Server starts on `http://localhost:8080`
 
-### Test Scenario 3: Manual Editing
+**Frontend Setup:**
 
-1. **Edit AI Summary**
-   - Click on the AI Summary box
-   - Modify any information (e.g., change budget, add preferences)
-   - Changes are immediately saved
+1. `cd frontend`
+2. `python -m http.server 8000`
+3. Navigate to `http://localhost:8000`
 
-2. **Add Staff Notes**
-   - Click on the "Staff Notes" section
-   - Add custom notes like: "Customer prefers morning activities. Son has peanut allergy."
+**Testing Steps:**
 
-3. **Search with Custom Input**
-   - Click "Search Activities"
-   - Results should incorporate both AI summary and staff notes
+Follow the same steps as Pattern 1 (steps 1-7), but with local URLs:
+* Frontend: `http://localhost:8000`
+* Backend: `http://localhost:8080`
 
-### Test Scenario 4: Mock Mode (No GCP Credentials)
+---
 
-Perfect for demos and testing without setting up GCP.
+### Chrome Setup (Recommended but Not Necessary)
 
-1. **Edit .env File**
-   ```bash
-   # In backend directory, edit .env
-   MOCK_MODE=true
-   ```
+1. **Update Chrome to Latest Version**
+   * We recommend updating Chrome to the latest version
+   * Check your version: `chrome://settings/help`
 
-2. **Restart Backend**
-   ```bash
-   cd backend
-   npm start
-   ```
+2. **Enable Built-in AI Flags:**
+   * `chrome://flags/#prompt-api-for-gemini-nano` → **Enabled**
+   * `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` → **Enabled**
+   * `chrome://flags/#summarization-api-for-gemini-nano` → **Enabled**
 
-3. **Verify Mock Mode**
-   - Console should show: "⚠️ WARNING: Running in MOCK MODE"
-   - Activity search returns sample Paris activities instantly (< 500ms)
-   - All features work with mock data
-   - Each activity card shows "⚠️ MOCK DATA" banner
+3. **Restart Chrome**
 
-4. **Test Activity Search**
-   - Use the same sample conversation from Test Scenario 1
-   - Click "Search Activities"
-   - Results appear immediately with 6 sample activities:
-     - **Klook**: Eiffel Tower, Louvre Museum
-     - **Trip.com**: Disneyland Paris, Versailles Palace
-     - **Expedia**: French Pastry Class, Mont Saint-Michel
+4. **Verify Model Availability** (Open DevTools Console):
+   * `await LanguageModel.availability();` // Should return `"available"`, `"downloadable"`, or `"downloading"`
+   * `await ai.summarizer.availability();` // Should return `"available"`, `"downloadable"`, or `"downloading"`
 
-## 🎯 Chrome Built-in AI API Usage Details
+## 🤖 Chrome Built-in AI APIs Used
 
-### Prompt API Implementation
+### 1. Prompt API (Primary)
 
-**Location:** `frontend/js/ai/ai-assistant.js`
+**What it does:**
+- Real-time analysis of conversation transcripts
+- Intelligent extraction of travel requirements (12-item structured format)
+- Context-aware suggestions for missing information
+- Natural language understanding for customer intent
+
+**Implementation** (`frontend/js/ai/ai-assistant.js`):
 
 ```javascript
-// Initialize AI session
-const session = await ai.languageModel.create({
-  systemPrompt: `You are an AI assistant helping travel agents...`,
-  temperature: 0.7,
-  topK: 40
+// Initialize AI session with system prompt
+this.session = await LanguageModel.create({
+  initialPrompts: [
+    {
+      role: 'system',
+      content: this.getSystemPrompt()
+    }
+  ]
 });
 
-// Analyze conversation
-const response = await session.prompt(conversationText);
+// Analyze conversation with streaming
+const stream = await this.session.promptStreaming(prompt);
+for await (const chunk of stream) {
+  accumulated += chunk;
+}
 ```
 
-**Key Features:**
+**Technical Details:**
 - Custom system prompts for travel domain expertise
-- Temperature and topK tuning for consistent outputs
+- Streaming API for real-time response display
 - Context-aware analysis of customer conversations
-- Structured JSON output for travel requirements
 
-### Summarizer API Implementation
+### 2. Summarizer API
 
-**Location:** `frontend/js/ai/summarizer.js`
+**What it does:**
+- Automatic summarization of customer conversations
+- Structured output generation for activity search
+- Key information extraction from unstructured dialogue
+
+**Implementation** (`frontend/js/ai/summarizer.js`):
 
 ```javascript
-// Create summarizer with custom format
-const summarizer = await ai.summarizer.create({
-  type: 'key-points',
-  format: 'markdown',
+// Configure summarizer options
+let options = {
+  sharedContext: 'Travel agency consultation conversation',
+  type: 'tldr',
+  format: 'plain-text',
   length: 'long'
-});
+};
+
+// Create summarizer
+const summarizer = await Summarizer.create(options);
 
 // Generate structured summary
-const summary = await summarizer.summarize(conversationText);
+const summary = await summarizer.summarize(textToSummarize);
 ```
 
-**Key Features:**
+**Technical Details:**
 - Custom format for 12-item travel requirements
-- Key-points extraction from natural dialogue
-- Markdown formatting for readability
+- TLDR-style extraction from natural dialogue
+- Plain-text formatting with structured prompts
 - Long-form summaries for comprehensive details
 
 ## 📁 Project Structure
@@ -458,21 +340,6 @@ GCP_LOCATION=us-central1
 PORT=8080
 ```
 
-**Important:**
-- When `MOCK_MODE=true`: Server runs without GCP credentials and returns sample data
-- When `MOCK_MODE=false`: Server requires valid `GCP_PROJECT` and `GCP_LOCATION` or will fail to start
-
-## 🎨 UI/UX Highlights
-
-- **Clean, Professional Design**: Travel agency-focused interface
-- **Real-time Feedback**: Instant AI analysis and suggestions
-- **Skeleton Loading States**: Smooth transitions during API calls
-- **Editable AI Outputs**: Staff can refine AI-generated summaries
-- **Responsive Layout**: Works on desktop and tablet
-- **Auto-scroll**: Automatically scrolls to results when searching
-- **Color-coded Status**: Visual indicators for collected/missing info
-- **Platform Badges**: Clear source attribution for activities
-
 ## 🔐 Privacy & Security
 
 ### Complete On-Device Processing
@@ -486,28 +353,15 @@ PORT=8080
 - **No Data Storage**: Conversations are processed in-memory only and discarded after session ends
 - **Minimal Data Transfer**: Backend receives only structured travel requirements, not customer names or personal details
 
-### Security Measures
-- **API Security**: Backend uses Google Cloud authentication
-- **CORS Enabled**: Secure cross-origin resource sharing
-- **Environment Variables**: Sensitive credentials never exposed in client code
-- **HTTPS Only**: All production API calls use encrypted connections
-
-## 🐛 Known Limitations
-
-1. **Chrome Built-in AI Availability**: Requires Chrome Canary/Dev with specific flags enabled
-2. **Gemini Nano Model**: Must be downloaded (~1.7GB) on first use
-3. **Voice Input**: Web Speech API works best with clear audio
-4. **Language Support**: Currently optimized for English conversations
-5. **Rate Limits**: Google Search Grounding has API quotas
-
 ## 🛠️ Troubleshooting
 
 ### Issue: "AI not available"
 **Solution:**
-1. Check Chrome version (127+)
+1. Update Chrome to the latest version
 2. Enable flags in `chrome://flags`
-3. Run in DevTools: `await ai.languageModel.capabilities()`
-4. Restart Chrome
+3. Restart Chrome
+4. Run in DevTools: `await LanguageModel.availability()` // Should return `"available"`, `"downloadable"`, or `"downloading"`
+
 
 ### Issue: "Backend connection failed"
 **Solution:**
@@ -518,7 +372,7 @@ PORT=8080
 
 ## 👥 Team
 
-**PLAID, Inc. - Data Mind**
+**PLAID　Inc. - Data Mind**
 
 ## 📄 License
 
