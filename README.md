@@ -4,6 +4,10 @@
 
 An intelligent travel activity search assistant that leverages Chrome's Built-in AI APIs to help travel agents quickly understand customer needs and find personalized activity recommendations.
 
+## 🌐 Live Demo
+
+**https://your-deployed-url-here.com** *(Requires Chrome Canary/Dev)*
+
 ## 🎥 Demo Video
 
 [Link to Demo Video - 3 minutes]
@@ -147,8 +151,8 @@ Travel agents face multiple challenges during customer consultations:
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/built-in-ai-challenge.git
-cd built-in-ai-challenge
+git clone https://github.com/plaidev/chrome-built-in-ai-challenge-2025.git
+cd chrome-built-in-ai-challenge-2025
 ```
 
 #### 2. Backend Setup
@@ -468,27 +472,6 @@ PORT=8080
 - **Auto-scroll**: Automatically scrolls to results when searching
 - **Color-coded Status**: Visual indicators for collected/missing info
 - **Platform Badges**: Clear source attribution for activities
-
-## 🚀 Deployment
-
-### Frontend Deployment (GitHub Pages / Netlify / Vercel)
-
-1. Update `API_BASE_URL` in `frontend/js/config.js` with production backend URL
-2. Deploy the `frontend/` directory to your hosting service
-
-### Backend Deployment (Google Cloud Run)
-
-```bash
-cd backend
-
-# Build and deploy to Cloud Run
-gcloud run deploy built-in-ai-api \
-  --source . \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars GCP_PROJECT=your-project-id,GCP_LOCATION=us-central1
-```
 
 ## 🔐 Privacy & Security
 
