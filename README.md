@@ -6,11 +6,11 @@ An intelligent travel activity search assistant that leverages Chrome's Built-in
 
 ## 🌐 Live Demo
 
-**https://your-deployed-url-here.com** *(Requires Chrome Canary/Dev)*
+**[https://chrome-built-in-ai-challenge-2025.vercel.app/](https://chrome-built-in-ai-challenge-2025.vercel.app/)** *(Requires Chrome Canary/Dev with AI flags enabled)*
 
 ## 🎥 Demo Video
 
-[Link to Demo Video - 3 minutes]
+**[Watch Demo Video (3 minutes)](https://www.youtube.com/watch?v=vm_aq-CtGXs)**
 
 ## 🌟 Project Overview
 

@@ -28,9 +28,26 @@ if (MOCK_MODE) {
   console.log('✅ Running in PRODUCTION MODE with GCP credentials');
 }
 
-// CORS configuration - Allow all origins for public API
+// CORS configuration - Whitelist allowed origins
+const allowedOrigins = [
+  'http://localhost:8000',
+  'http://localhost:3000',
+  'http://localhost:5501',
+  'http://127.0.0.1:8000',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5501',
+  'https://chrome-built-in-ai-challenge-2025.vercel.app'
+];
+
 const corsOptions = {
-  origin: '*',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: false,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']

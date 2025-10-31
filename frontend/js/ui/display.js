@@ -44,8 +44,17 @@ function createPlatformActivityCard(platformResult) {
   let textWithoutHeader = platformResult.textWithCitations;
   textWithoutHeader = textWithoutHeader.replace(/^##\s*[^\n]+\n*/i, '').trim();
 
+  // Configure marked.js to open links in new tab
+  const renderer = new marked.Renderer();
+  renderer.link = function(token) {
+    const href = token.href || '';
+    const title = token.title || '';
+    const text = token.text || '';
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer" ${title ? `title="${title}"` : ''}>${text}</a>`;
+  };
+
   // Use marked.js to convert markdown to HTML
-  const htmlContent = marked.parse(textWithoutHeader);
+  const htmlContent = marked.parse(textWithoutHeader, { renderer });
 
   // Add platform header
   const platformHeader = `
