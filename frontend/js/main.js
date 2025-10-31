@@ -43,15 +43,28 @@ async function initializeApp() {
       startSummaryTimer(async () => {
         const transcript = getTranscript();
         await generateSummary(transcript);
+
+        // Also analyze conversation with AI Assistant periodically
+        console.log('🕒 [main.js - timer] Checking AI Assistant conditions - aiAssistant:', !!aiAssistant, 'transcript length:', transcript?.length);
+        if (aiAssistant && transcript && transcript.length > 50) {
+          console.log('🕒 [main.js - timer] Calling AI Assistant analyzeConversation...');
+          await aiAssistant.analyzeConversation(transcript);
+        } else {
+          console.log('🕒 [main.js - timer] Skipping AI Assistant - conditions not met');
+        }
       });
     },
     onEnd: async () => {
       stopSummaryTimer();
 
-      // Analyze conversation with Travel Assistant when speech recognition ends
+      // Final analysis when speech recognition ends
       const transcript = getTranscript();
+      console.log('🛑 [main.js - onEnd] Checking AI Assistant conditions - aiAssistant:', !!aiAssistant, 'transcript length:', transcript?.length);
       if (aiAssistant && transcript && transcript.length > 50) {
+        console.log('🛑 [main.js - onEnd] Calling AI Assistant analyzeConversation...');
         await aiAssistant.analyzeConversation(transcript);
+      } else {
+        console.log('🛑 [main.js - onEnd] Skipping AI Assistant - conditions not met');
       }
     },
     onResult: (final, interim) => {
@@ -424,6 +437,15 @@ async function handlePromptAPIRecording() {
         const transcript = audioTranscriber.getFullTranscript();
         if (transcript) {
           await generateSummary(transcript);
+
+          // Also analyze conversation with AI Assistant periodically
+          console.log('🕒 [main.js - Prompt API timer] Checking AI Assistant conditions - aiAssistant:', !!aiAssistant, 'transcript length:', transcript?.length);
+          if (aiAssistant && transcript && transcript.length > 50) {
+            console.log('🕒 [main.js - Prompt API timer] Calling AI Assistant analyzeConversation...');
+            await aiAssistant.analyzeConversation(transcript);
+          } else {
+            console.log('🕒 [main.js - Prompt API timer] Skipping AI Assistant - conditions not met');
+          }
         }
       });
     }
@@ -440,8 +462,12 @@ async function handlePromptAPIRecording() {
 
     // Analyze conversation with Travel Assistant
     const transcript = audioTranscriber.getFullTranscript();
+    console.log('🛑 [main.js - Prompt API stop] Checking AI Assistant conditions - aiAssistant:', !!aiAssistant, 'transcript length:', transcript?.length);
     if (aiAssistant && transcript && transcript.length > 50) {
+      console.log('🛑 [main.js - Prompt API stop] Calling AI Assistant analyzeConversation...');
       await aiAssistant.analyzeConversation(transcript);
+    } else {
+      console.log('🛑 [main.js - Prompt API stop] Skipping AI Assistant - conditions not met');
     }
   }
 }

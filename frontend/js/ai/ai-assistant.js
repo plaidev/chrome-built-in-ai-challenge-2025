@@ -7,6 +7,7 @@ export class AIAssistant {
   constructor() {
     this.session = null;
     this.lastAnalysis = null;
+    this.lastAnalyzedText = '';
   }
 
   async initialize() {
@@ -151,8 +152,21 @@ Note: Items not clearly mentioned in the conversation must be asked about. Items
   }
 
   async analyzeConversation(transcript) {
-    if (!this.session || !transcript) return null;
+    console.log('🔍 [ai-assistant.js - analyzeConversation] Called with transcript length:', transcript?.length);
+    console.log('🔍 [ai-assistant.js - analyzeConversation] Session exists:', !!this.session);
 
+    if (!this.session || !transcript) {
+      console.log('⚠️ [ai-assistant.js - analyzeConversation] Skipping - session or transcript missing');
+      return null;
+    }
+
+    // Check if transcript has changed since last analysis
+    if (transcript === this.lastAnalyzedText) {
+      console.log('⚠️ [ai-assistant.js - analyzeConversation] Skipping - transcript has not changed');
+      return this.lastAnalysis;
+    }
+
+    console.log('✅ [ai-assistant.js - analyzeConversation] Starting conversation analysis...');
     const suggestionText = document.getElementById('suggestionText');
     if (suggestionText) {
       suggestionText.innerHTML = '<span style="animation: thinking 1.5s infinite;">Thinking...</span>';
@@ -264,6 +278,9 @@ Let's ask about language preference
         }, 100);
       }
 
+      // Update last analyzed text to avoid duplicate analysis
+      this.lastAnalyzedText = transcript;
+
       this.lastAnalysis = {
         collected: {},
         missing: [],
@@ -271,6 +288,7 @@ Let's ask about language preference
         progress: 0
       };
 
+      console.log('✅ [ai-assistant.js - analyzeConversation] Analysis complete');
       return this.lastAnalysis;
     } catch (error) {
       console.error('Failed to analyze conversation:', error);
